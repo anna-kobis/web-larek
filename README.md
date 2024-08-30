@@ -2,19 +2,21 @@
 
 Проектная работа представляет собой одностраничный сайт - интернет-магазин с товарами для веб-разработчиков - Web-ларёк. На сайте можно просмотреть каталог товаров, добавить товары в корзину и оформить заказ.
 
-### Стек технологий
+## Стек технологий
 
 - Используемый стек: HTML, SCSS, TypeScript.
 - Для сборки используется Webpack.
 - Подключены инструменты форматирования и линтинга: Prettier, ESLint.
 
-### Структура проекта
+## Структура проекта
 
 Структура проекта:
 
 - src/ — исходные файлы проекта
 - src/components/ — папка с JS компонентами
 - src/components/base/ — папка с базовым кодом
+- src/components/model/ - папка с моделями данных
+- src/components/view/ - папка с компонентами отображения
 - src/types/ — папка с типами
 
 Важные файлы:
@@ -25,7 +27,7 @@
 - src/utils/constants.ts — файл с константами
 - src/utils/utils.ts — файл с утилитами
 
-### Установка и запуск
+## Установка и запуск
 
 После клонирования проекта для установки зависимостей и запуска в режиме разработки необходимо выполнить команды:
 
@@ -41,7 +43,7 @@ yarn
 yarn start
 ```
 
-### Сборка
+## Сборка
 
 Сборка проекта в продакшен осуществляется командой:
 
@@ -55,17 +57,17 @@ npm run build
 yarn build
 ```
 
-### Архитектура
+## Архитектура
 
-Архитектура проекта основана на применении MVP-паттерна, в котором характерно разделение кода на слои данных (Model), отображения (View) и управления (Presenter). Особенностью реализации данного паттерна является отсутствие четкой связи между моделью и отображением - их связь осуществляется через Presenter. При разработке приложения используется событийно-ориентированный подход.
+Архитектура проекта основана на применении MVP-паттерна, в котором характерно разделение кода на слои [данных (Model)](#cлой-данных), [отображения (View)](#слой-отображения) и [управления (Presenter)](#слой-управления). Особенностью реализации данного паттерна является отсутствие четкой связи между моделью и отображением - их связь осуществляется через Presenter. При разработке приложения используется событийно-ориентированный подход.
 
 Для работы приложения в `src/index.ts` создаются экземпляры основных и переиспользуемых классов приложения (экземпляры некоторых классов пересоздаются при определенных событиях внутри кода обработчиков). Данные получают с сервера с помощью методов класса AppAPI, работа с данными осуществляется методами класса AppModel. Отображение данных настраивается с помощью методов классов View. При изменении данных и отображения инициируются определенные события (часть инициирования событий заложена в методах классов). Устанавливаются слушатели и обработчики событий, связывая, таким образом, данные с отображением.
 
 UML-схема используемых классов:
 
-![Схема классов](./documentation/AllClasses.svg)
+![Схема классов](./documentation/AllClasses.svg) 
 
-#### Типы:
+### Типы:
 
 - `type ApiListResponse<Type>` - тип данных ответа от сервера. Включает массив данных `items` передаваемого типа `Type` и числовое значение `total` общего количества полученных элементов.
 - `type ApiPostMethods` - тип определяет поддерживаемые методы запроса к серверу.
@@ -73,8 +75,8 @@ UML-схема используемых классов:
 - `type Subscriber` - тип подписчиков на события - обработчиков. Представлен функцией.
 - `type EmitterEvent` - тип структуры объекта события. Включает имя события `eventName` в виде строки и данные `data`, связанные с событием, неизвестного типа.
 - `enum EventsList` - список возможных событий при работе приложения.
+- `interface IProduct` - тип данных объекта товара. Включает строки идентификатора `id`, названия `title`, описания `description`, url изображения `image` товара, категорию товара `category`, определенную типом `ICategory`, цену товара `price`, представленную в числовом значении или значении типа `null` для бесценного товара, статус нахождения товара в корзине `isInBasket` в виде логического значения.
 - `type ICategory` - тип определяет возможные категории товаров.
-- `type IBasketProduct` - тип данных объекта товара в корзине. Выбирает только необходимые поля из общего типа товара `IProduct`.
 - `interface IPaymentAddressForm` - интерфейс данных формы оплаты и адреса. Включает возможные значения поля оплаты `payment` и строку адреса `address`.
 - `interface IContactsForm` - интерфейс данных формы контактов. Включает строки email `email` и телефона `phone`.
 - `type IOrderForm` - тип общих данных форм оформления заказа. Включает данные формы оплаты и адреса и формы контактов.
@@ -91,29 +93,28 @@ UML-схема используемых классов:
 - `interface IFormData` - тип передаваемых данных для отображения формы. Включает состояние валидности формы `isValid` в логическом значении и массив строк ошибок заполнения формы `errors`.
 - `type IPaymentAddressData` - тип передаваемых данных для отображения формы оплаты и адреса. Идентичен типу данных `IPaymentAddressForm`.
 - `type IContactsData` - тип передаваемых данных для отображения формы контактов. Идентичен типу данных `IContactsForm`.
-- `interface IModalData` - тип передаваемых данных для отображения модального окна. Включает элемент внутреннего контента `content`.
 - `interface ISuccessActions` - интерфейс взаимодействий с сообщением об успешном оформлении заказа. Описывает функции обработчики для слушателей событий.
 - `interface ISuccessData` - тип передаваемых данных для отображения сообщения об успешном оформлении заказа. Включает общую сумму заказа `total` в числовом значении.
+- `interface IModalData` - тип передаваемых данных для отображения модального окна. Включает элемент внутреннего контента `content`.
 
-Также в директории `src/types` представлены интерфейсы для реализации классов, описывающие публичные поля и методы. Описание публичных и других методов классов приведено далее в документации по каждому классу отдельно.
+Также в директории `src/types` представлены интерфейсы для реализации классов, описывающие публичные поля и методы. Описание публичных и других полей и методов классов приведено далее в документации по каждому классу отдельно.
 
-### Слой данных
+## Слой данных
 
 Слой данных представлен следующими классами:
 
-- Api - базовый класс для работы с сервером.
-- AppApi - основной класс для работы с сервером проекта.
-- Model - базовый класс для реализации модели данных.
-- Product - класс для хранения данных товара.
-- AppModel - основной класс для работы с данными приложения.
+- [Api](#класс-api) - базовый класс для работы с сервером.
+- [AppApi](#класс-appapi) - основной класс для работы с сервером проекта.
+- [Model](#класс-model) - базовый класс для реализации модели данных.
+- [AppModel](#класс-appmodel) - основной класс для работы с данными приложения.
 
 ![Схема слоя данных](./documentation/Model.svg)
 
-#### Классы работы с сервером
+### Классы работы с сервером
 
 ![Схема классов Api](./documentation/Model/ApiClasses.svg)
 
-#### Класс Api
+### Класс Api
 
 Базовый класс предоставляет основные методы для клиент-серверного взаимодействия приложения.
 
@@ -122,10 +123,10 @@ class Api {
   readonly baseUrl: string;
   protected options: RequestInit;
 
-  constructor(baseUrl: string, options: RequestInit = {}): Api {};
-  protected handleResponse(response: Response): Promise<object> {};
-  get(uri: string): Promise<object> {};
-  post(uri: string, data: object, method: ApiPostMethods): Promise<object> {};
+  constructor(baseUrl: string, options: RequestInit = {}): Api {}
+  protected handleResponse(response: Response): Promise<object> {}
+  get(uri: string): Promise<object> {}
+  post(uri: string, data: object, method: ApiPostMethods): Promise<object> {}
 }
 ```
 
@@ -134,10 +135,10 @@ class Api {
 Методы класса:
 
 - `handleResponse` - защищенный метод обрабатывает ответ от сервера в формате json.
-- `get` - метод получения данных с сервера, возвращает обработанные `handleResponse` данные.
-- `post` - метод отправки данных на сервер, возвращает обработанные `handleResponse` данные. Метод отправки определяется аргументом `method`, типизированным `type ApiPostMethods`.
+- `get` - метод получения данных с сервера. Возвращает обработанные `handleResponse` данные.
+- `post` - метод отправки данных на сервер. Возвращает обработанные `handleResponse` данные. Метод отправки определяется аргументом `method`, типизированным `type ApiPostMethods`.
 
-#### Класс AppApi
+### Класс AppApi
 
 Расширяет функциональность базового класса Api и предоставляет методы для взаимодействия с сервером проекта: методы для получения списка товаров и отправки заказа. Класс реализует интерфейс `IAppAPI`.
 
@@ -145,10 +146,10 @@ class Api {
 class AppApi extends Api implements IAppAPI {
   readonly imageUrl: string;
 
-  constructor(imageUrl: string, baseUrl: string, options?: RequestInit): IAppAPI {};
-  getProductsList(): Promise<IProduct[]> {};
-  getProductItem(id: string): Promise<IProduct> {};
-  postOrder(order: IOrder): Promise<IOrderResult> {};
+  constructor(imageUrl: string, baseUrl: string, options?: RequestInit): IAppAPI {}
+  getProductsList(): Promise<IProduct[]> {}
+  getProductItem(id: string): Promise<IProduct> {}
+  postOrder(order: IOrder): Promise<IOrderResult> {}
 }
 ```
 
@@ -156,22 +157,22 @@ class AppApi extends Api implements IAppAPI {
 
 Методы класса:
 
-- `getProductsList` - метод для получения списка товаров с сервера, возвращает промис с массивом объектов товаров. Каждый товар типизирован `interface IProduct`.
-- `getProductItem` - метод для получения товара по идентификатору, возвращает промис с объектом товара.
+- `getProductsList` - метод для получения списка товаров с сервера. Возвращает промис с массивом объектов товаров. Каждый товар типизирован `interface IProduct`.
+- `getProductItem` - метод для получения товара по идентификатору. Возвращает промис с объектом товара.
 - `postOrder` - метод отправки заказа на сервер. Принимает объект заказа, типизированный `interface IOrder`. Возвращает промис с объектом ответа, типизированным `interface IOrderResult`.
 
-#### Классы моделей данных
+### Классы моделей данных
 
 ![Схема классов Model](./documentation/Model/ModelClasses.svg)
 
-#### Класс Model
+### Класс Model
 
-Базовый абстрактный класс описывает модели данных и связывает данные с событиями. Реализует интерфейс `IModel<T>`.
+Базовый абстрактный класс описывает модели данных и связывает данные с событиями. Реализует интерфейс `IModel`.
 
 ```
-abstract class Model<T> implements IModel<T> {
-  constructor(data: Partial<T>, protected events: IEvents): IModel<T> {};
-  emitChanges(event: string, payload?: object): void {};
+abstract class Model<T> implements IModel {
+  constructor(data: Partial<T>, protected events: IEvents): IModel {}
+  emitChanges(event: string, payload?: object): void {}
 }
 ```
 
@@ -181,45 +182,28 @@ abstract class Model<T> implements IModel<T> {
 
 - `emitChanges` - метод инициирует событие по указанному имени с дополнительными параметрами.
 
-#### Класс Product
+### Класс AppModel
 
-Класс предназначен для хранения данных товара. Данные типизированы `interface IProduct`.
-
-```
-class Product extends Model<IProduct> {
-  id: string;
-  title: string;
-  description: string;
-  image: string;
-  category: ICategory;
-  price: number | null;
-  isInBasket: boolean;
-}
-```
-
-Для реализации используется конструктор базового класса, сохраняющий переданные данные товара: строки идентификатора, названия, описания, ссылки на изображение. Категория товара типизирована `type ICategory`. Цена товара представлена числом для обычных товаров или типом `null` для бесценного товара. Поле `isInBasket` имеет значение логического типа и определяет нахождение товара в корзине.
-
-#### Класс AppModel
-
-Расширяет функциональность базового класса Model и предоставляет методы для управления приложением. Данные типизированы `interface IAppData`. Класс реализует интерфейс `IAppModel`. Включает методы для получения и просмотра товаров, добавления и удаления товаров из корзины, подсчета общей стоимости и очистки корзины, заполнения и валидации полей ввода.
+Расширяет функциональность базового класса Model и предоставляет методы для управления приложением. Данные типизированы `interface IAppData`. Класс реализует интерфейс `IAppModel`. Включает методы для получения и просмотра товаров, добавления и удаления товаров из корзины, подсчета общей стоимости и очистки корзины, заполнения, валидации полей ввода и очистки заказа.
 
 ```
 class AppModel extends Model<IAppData> implements IAppModel {
   productList: IProduct[];
   preview: string | null;
-  basket: IBasketProduct[];
-  order: IOrder;
+  basket: IProduct[];
+  order: Partial<IOrder>;
   formErrors: IFormErrors;
 
-  setProductList(items: IProduct[]): void {};
-  setPreviewProduct(item: IProduct): void {};
-  addProductToBasket(item: IBasketProduct): void {};
-  removeProductFromBasket(id: string): void {};
-  getTotalPrice(): number {};
-  setOrderField(field: keyof IOrderForm, value: string): void {};
-  validateOrder(): boolean {};
-  clearBasket(): void {};
-  getProduct(id: string): IProduct {};
+  setProductList(items: IProduct[]): void {}
+  setPreviewProduct(item: IProduct): void {}
+  addProductToBasket(item: IProduct): void {}
+  removeProductFromBasket(item: IProduct): void {}
+  getTotalPrice(): number {}
+  setOrderField<T extends keyof IOrderForm>(field: T, value: IOrderForm[T]): void {}
+  validateOrder(): boolean {}
+  setOrder(): void {}
+  clearBasket(): void {}
+  clearOrder(): void {}
 }
 ```
 
@@ -229,29 +213,30 @@ class AppModel extends Model<IAppData> implements IAppModel {
 
 - `productList` - список товаров. Типизирован массивом товаров типа `IProduct`.
 - `preview` - идентификатор товара, выбранного для просмотра.
-- `basket` - список товаров в корзине. Типизирован массивом товаров типа `IBasketProduct`.
+- `basket` - список товаров в корзине. Типизирован массивом товаров типа `IProduct`.
 - `order` - объект данных заказа. Типизирован `interface IOrder`.
 - `formErrors` - объект ошибок заполнения формы. Типизирован `type IFormErrors`.
 
 Методы класса:
 
-- `setProductList` - метод сборки каталога товаров. Создает экземпляры класса Product для каждого товара и инициирует событие изменения списка товаров.
+- `setProductList` - метод сборки каталога товаров. Инициирует событие изменения списка товаров.
 - `setPreviewProduct` - метод установки выбранного товара для просмотра. Инициирует событие изменения открытой карточки.
-- `addProductToBasket` - метод добавления товара в корзину. Инициирует событие изменения корзины.
-- `removeProductFromBasket` - метод удаления товара из корзины. Инициирует событие изменения корзины.
+- `addProductToBasket` - метод добавления товара в корзину. Меняет статус товаров в корзине `isInBasket`. Инициирует событие изменения корзины.
+- `removeProductFromBasket` - метод удаления товара из корзины. Меняет статус товаров в корзине `isInBasket`. Инициирует событие изменения корзины.
 - `getTotalPrice` - метод возвращает общую стоимость всех товаров в корзине.
-- `setOrderField` - метод установки значения поля ввода в данные заказа. Проверка валидности формы.
+- `setOrderField` - метод установки значения поля ввода в данные заказа. Запускает проверку валидности формы.
 - `validateOrder` - метод проверки валидности формы. Формирует объект `formErrors` и инициирует событие изменения ошибок формы.
+- `setOrder` - метод установки идентификаторов товаров и их общей стоимости в данные заказа.
 - `clearBasket` - метод очистки корзины. Меняет статус товаров в корзине `isInBasket`, инициирует событие изменения корзины.
-- `getProduct` - вспомогательный метод возвращает товар по идентификатору.
+- `clearOrder` - метод очистки данных заказа.
 
-### Слой управления
+## Слой управления
 
-Слой управления включает базовый класс EventEmitter - брокер событий, реализующий событийно-ориентированный подход. Поскольку приложение небольшое, код представителя со слушателями и обработчиками событий не выделен в отдельные классы, а приведен в корневом файле `src/index.ts`.
+Слой управления включает базовый класс [EventEmitter](#класс-eventemitter) - брокер событий, реализующий событийно-ориентированный подход. Поскольку приложение небольшое, код представителя со слушателями и обработчиками событий не выделен в отдельные классы, а приведен в корневом файле `src/index.ts`.
 
 ![Схема слоя управления](./documentation/Presenter.svg)
 
-#### Класс EventEmitter
+### Класс EventEmitter
 
 Базовый класс представляет собой брокер событий, предоставляющий методы для реализации событийно-ориентированного подхода. Класс реализует интерфейс `IEvents`. Включает методы для инициирования событий и установки обработчиков на них.
 
@@ -259,13 +244,13 @@ class AppModel extends Model<IAppData> implements IAppModel {
 class EventEmitter implements IEvents {
   _events: Map<EventName, Set<Subscriber>>;
 
-  constructor(): EventEmitter {};
-  on<T extends object>(eventName: EventName, callback: (event: T) => void): void {};
-  off(eventName: EventName, callback: Subscriber): void {};
-  emit<T extends object>(eventName: string, data?: T): void {};
-  onAll(callback: (event: EmitterEvent) => void): void {};
-  offAll(): void {};
-  trigger<T extends object>(eventName: string, context?: Partial<T>): (event?: object) => void {};
+  constructor(): EventEmitter {}
+  on<T extends object>(eventName: EventName, callback: (event: T) => void): void {}
+  off(eventName: EventName, callback: Subscriber): void {}
+  emit<T extends object>(eventName: string, data?: T): void {}
+  onAll(callback: (event: EmitterEvent) => void): void {}
+  offAll(): void {}
+  trigger<T extends object>(eventName: string, context?: Partial<T>): (event?: object) => void {}
 }
 ```
 
@@ -282,64 +267,64 @@ class EventEmitter implements IEvents {
 
 Возможные события определяются списком `EventsList`:
 
-- `'products:change'` - изменены данные товаров
-- `'card:select'` - открыта карточка товара
-- `'card:add'` - товар добавлен в корзину
-- `'card:remove'` - товар удален из корзины
-- `'preview:change'` - изменена открытая карточка
-- `'basket:open'` - открыта корзина
-- `'backet:change'` - изменена корзина
-- `'order:open'` - открыта форма оплаты и адреса
-- `'order.address:change'` - изменен адрес
-- `'formErrors:change'` - изменены ошибки формы
-- `'order:ready'` - поля формы валидны
-- `'contacts:open'` - открыта форма контактов
-- `'contacts.email:change'` - изменен email
-- `'contacts.phone:change'` - изменен телефон
-- `'order:submit'` - заказ отправлен
-- `'modal:open'` - открыто модальное окно
-- `'modal:close'` - закрыто модальное окно
+- `'products:change'` - изменены данные товаров.
+- `'card:select'` - открыта карточка товара.
+- `'card:add'` - товар добавлен в корзину.
+- `'card:remove'` - товар удален из корзины.
+- `'preview:change'` - изменена открытая карточка.
+- `'basket:open'` - открыта корзина.
+- `'backet:change'` - изменена корзина.
+- `'order:open'` - открыта форма оплаты и адреса.
+- `'order.payment:change'` - изменен способ оплаты.
+- `'order.address:change'` - изменен адрес.
+- `'formErrors:change'` - изменены ошибки формы.
+- `'order:submit'` - открыта форма контактов.
+- `'contacts.email:change'` - изменен email.
+- `'contacts.phone:change'` - изменен телефон.
+- `'contacts:submit'` - заказ отправлен.
+- `'modal:open'` - открыто модальное окно.
+- `'modal:close'` - закрыто модальное окно.
 
-### Слой отображения
+## Слой отображения
 
 Слой отображения представлен следующими классами:
 
-- View - базовый класс для описания компонентов интерфейса приложения.
-- PageView - класс для отображения элементов главной страницы сайта.
-- CardView - класс для отображения карточки товара на главной странице.
-- CardPreviewView - класс для отображения карточки товара в модальном окне.
-- CardBasketView - класс для отображения товара в корзине.
-- BasketView - класс для отображения корзины.
-- FormView - общий класс для отображения формы оформления заказа.
-- PaymentAddressView - класс для отображения формы оплаты и адреса.
-- ContactsView - класс для отображения формы контактов.
-- SuccessView - класс для отображения сообщения успешного оформления заказа.
-- ModalView - класс для отображения модальных окон.
+- [View](#класс-view) - базовый класс для описания компонентов интерфейса приложения.
+- [PageView](#класс-pageview) - класс для отображения элементов главной страницы сайта.
+- [CardView](#класс-cardview) - класс для отображения карточки товара на главной странице.
+- [CardPreviewView](#класс-cardpreviewview) - класс для отображения карточки товара в модальном окне.
+- [CardBasketView](#класс-cardbasketview) - класс для отображения товара в корзине.
+- [BasketView](#класс-basketview) - класс для отображения корзины.
+- [FormView](#класс-formview) - общий класс для отображения формы оформления заказа.
+- [PaymentAddressView](#класс-paymentaddressview) - класс для отображения формы оплаты и адреса.
+- [ContactsView](#класс-contactsview) - класс для отображения формы контактов.
+- [SuccessView](#класс-successview) - класс для отображения сообщения успешного оформления заказа.
+- [ModalView](#класс-modalview) - класс для отображения модальных окон.
 
 Главными контейнерами для отображения других компонентов являются экземпляры классов PageView и ModalView. В компоненте главной страницы PageView располагаются компоненты карточек товаров CardView. Компонент модального окна ModalView в качестве внутреннего контента может включать компоненты карточек товаров с описанием CardPreviewView, корзины BasketView, форм оформления заказа PaymentAddressView и ContactsView, сообщения успешного оформления заказа SuccessView. В компоненте отображения корзины BasketView располагаются компоненты карточек товаров в виде краткой записи CardBasketView.
 
 ![Схема слоя отображения](./documentation/View.svg)
 
-#### Производные классы View
+### Производные классы View
 
 ![Схема классов View](./documentation/View/ViewClasses.svg)
 
-#### Класс View
+### Класс View
 
 Базовый абстрактный класс для описания отображения пользовательского интерфейса. Реализует интерфейс `IView<T>`. Предоставляет основные методы для управления отображением.
 
 ```
 abstract class View<T> implements IView<T> {
-  constructor(protected readonly container: HTMLElement): IView<T> {};
-  toggleClass(element: HTMLElement, className: string, state?: boolean): void {};
-  protected setImage(element: HTMLElement, src: string, alt?: string): void {};
-  protected setTextContent(element: HTMLElement, value: unknown): void {};
-  setDisabled(element: HTMLElement, state: boolean): void {};
-  render(data?: Partial<T>): HTMLElement {};
+  protected constructor(protected readonly container: HTMLElement): IView<T> {}
+  toggleClass(element: HTMLElement, className: string, state?: boolean): void {}
+  protected setImage(element: HTMLImageElement, src: string, alt?: string): void {}
+  protected setTextContent(element: HTMLElement, value: unknown): void {}
+  setDisabled(element: HTMLElement, state: boolean): void {}
+  render(data?: Partial<T>): HTMLElement {}
 }
 ```
 
-Конструктор типизирован `interface IViewConstructor<T>`. Принимает аргументом контейнер `HTMLElement` для отображения данных и сохраняет в одноименное защищенное поле `container`.
+Защищенный конструктор типизирован `interface IViewConstructor<T>`. Принимает аргументом контейнер элемента `HTMLElement` для отображения данных и сохраняет в одноименное защищенное поле `container`.
 
 Методы класса:
 
@@ -349,7 +334,7 @@ abstract class View<T> implements IView<T> {
 - `setDisabled` - метод для переключения атрибута `disabled` в соответствии с указанным состоянием `state` для элемента `element`.
 - `render` - метод отрисовки компонентов приложения в соответствии с передаваемыми данными `data`. Возвращает элемент с обновленными свойствами.
 
-#### Класс PageView
+### Класс PageView
 
 Расширяет базовый класс View и предоставляет методы для отображения элементов главной страницы сайта. Данные типизированы `interface IPageData`. Класс реализует интерфейс `IPageView`. Включает методы для обновления счетчика товаров в корзине, замены каталога товаров и переключения блокировки страницы при открытии и закрытии модального окна.
 
@@ -358,23 +343,23 @@ class PageView extends View<IPageData> implements IPageView {
   protected _basketCounter: HTMLElement;
   protected _productsList: HTMLElement;
   protected _wrapper: HTMLElement;
-  protected _basket: HTMLElement;
+  protected _basket: HTMLButtonElement;
 
-  constructor(container: HTMLElement, protected events: IEvents): IPageView {};
-  set basketCounter(value: number) {};
-  set productsList(items: HTMLElement[]) {};
-  set locked(state: boolean) {};
+  constructor(container: HTMLElement, protected events: IEvents): IPageView {}
+  set basketCounter(value: number) {}
+  set productsList(items: HTMLElement[]) {}
+  set locked(state: boolean) {}
 }
 ```
 
-Конструктор типизирован `interface IPageViewConstructor`. Принимает аргументами контейнер элементов страницы и объект событий типа `IEvents` для взаимодействия c другими компонентами. В реализации использует родительский конструктор. Сохраняет объект событий в защищенное поле `events`. Также в конструкторе производится поиск изменяющихся элементов и сохранение их в защищенные поля класса.
+Конструктор типизирован `interface IPageViewConstructor`. Принимает аргументами контейнер элементов страницы и объект событий типа `IEvents` для взаимодействия c другими компонентами. В реализации использует родительский конструктор. Сохраняет объект событий в защищенное поле `events`. Также в конструкторе производится поиск изменяющихся элементов и сохранение их в защищенные поля класса. Назначает обработчик события кнопке для открытия корзины.
 
 Поля класса:
 
 - `_basketCounter` - защищенное поле элемента счетчика корзины.
 - `_productsList` - защищенное поле элемента контейнера для карточек товара.
 - `_wrapper` - защищенное поле элемента обертки главной страницы для блокировки при работе с модальными окнами.
-- `_basket` - защищенное поле элемента кнопки для открытия корзины.
+- `_basket` - защищенное поле элемента `<button>` кнопки для открытия корзины.
 
 Методы класса:
 
@@ -382,35 +367,35 @@ class PageView extends View<IPageData> implements IPageView {
 - `set productsList` - сеттер для обновления каталога товаров на главной странице в соответствии с переданным массивом элементов `items`.
 - `set locked` - сеттер для переключения блокировки страницы в соответствии с переданным состоянием `state`.
 
-#### Классы отображения карточек товаров
+### Классы отображения карточек товаров
 
 ![Схема классов CardView](./documentation/View/CardClasses.svg)
 
-#### Класс CardView
+### Класс CardView
 
 Расширяет базовый класс View и предоставляет методы для отображения элементов информации о товаре на главной странице сайта. Данные типизированы `interface ICardData`. Класс реализует интерфейс `ICardView`. Включает методы для обновления и получения данных о товаре: идентификатор, название, url изображения, категория, цена.
 
 ```
-class CardView<T = ICardData> extends View<ICardData> implements ICardView {
+class CardView<T = ICardData> extends View<T> implements ICardView {
   protected _title: HTMLElement;
   protected _category?: HTMLElement;
   protected _image?: HTMLImageElement;
   protected _price: HTMLElement;
-  protected categories: ICategoryNames;
+  static categories: ICategoryNames;
 
-  constructor(container: HTMLElement, actions?: ICardActions): ICardView {};
-  set id(id: string) {};
-  get id(): string {};
-  set title(title: string) {};
-  get title(): string {};
-  set image(src: string) {};
-  set category(category: ICategory) {};
-  set price(price: number | null) {};
-  get price(): number | null {};
+  constructor(container: HTMLElement, actions?: ICardActions): ICardView {}
+  set id(id: string) {}
+  get id(): string {}
+  set title(title: string) {}
+  get title(): string {}
+  set image(src: string) {}
+  set category(category: ICategory) {}
+  set price(price: number | null) {}
+  get price(): number | null {}
 }
 ```
 
-Конструктор типизирован `interface ICardViewConstructor`. Принимает аргументами контейнер элементов информации о товаре и объект типа `ICardActions` для передачи колбэка слушателю события. В реализации использует родительский конструктор. Также в конструкторе класса производится поиск элементов карточки товара и сохранение их в защищенные поля класса.
+Конструктор типизирован `interface ICardViewConstructor`. Принимает аргументами контейнер элементов информации о товаре и объект типа `ICardActions` для передачи колбэка слушателю события. В реализации использует родительский конструктор. Также в конструкторе класса производится поиск элементов карточки товара и сохранение их в защищенные поля класса. Назначает обработчик события контейнеру для открытия карточки товара в модальном окне.
 
 Поля класса:
 
@@ -418,7 +403,7 @@ class CardView<T = ICardData> extends View<ICardData> implements ICardView {
 - `_category` - защищенное поле элемента категории товара.
 - `_image` - защищенное поле элемента `<img>` изображения товара.
 - `_price` - защищенное поле элемента цены товара.
-- `categories` - защищенное поле объекта категорий товара для формирования названия класса по bem. Типизировано `type ICategoryNames`. Представляет собой объект с ключами - названиями категории товара - и значениями - строками модификатора для каждой категории.
+- `categories` - статическое поле объекта категорий товара для формирования названия класса по bem. Типизировано `type ICategoryNames`. Представляет собой объект с ключами - названиями категории товара - и значениями - строками модификатора для каждой категории.
 
 Методы класса:
 
@@ -427,11 +412,11 @@ class CardView<T = ICardData> extends View<ICardData> implements ICardView {
 - `set title` - сеттер для установки названия товара в качестве текстового контента в элемент `_title`.
 - `get title` - геттер для получения названия товара из текстового контента элемента `_title`.
 - `set image` - сеттер для установки url изображения товара в элемент `_image`.
-- `set category` - сеттер для установки категории товара в качестве текстового контента в элемент `_category` и формирования класса элемента с модификатором категории.
+- `set category` - сеттер для установки категории товара в качестве текстового контента в элемент `_category` и добавление класса элемента с модификатором категории.
 - `set price` - сеттер для установки цены товара в качестве текстового контента в элемент `_price`. В случае если цена товара равна `null`, устанавливается значение `Бесценно`.
 - `get price` - геттер для получения цены товара из текстового контента элемента `_price`.
 
-#### Класс CardPreviewView
+### Класс CardPreviewView
 
 Расширяет класс CardView и предоставляет методы для отображения элементов информации о товаре в модальном окне. Данные типизированы `interface ICardPreviewData`. Класс реализует интерфейс `ICardPreviewView`. Включает методы для обновления описания, цены товара и его статуса добавления в корзину.
 
@@ -440,14 +425,14 @@ class CardPreviewView extends CardView<ICardPreviewData> implements ICardPreview
   protected _description: HTMLElement;
   protected _button: HTMLButtonElement;
 
-  constructor(container: HTMLElement, actions?: ICardActions): ICardPreviewView {};
-  set description(description: string) {};
-  set price(price: number | null) {};
-  set isInBasket(state: boolean) {};
+  constructor(container: HTMLElement, actions?: ICardActions): ICardPreviewView {}
+  set description(description: string) {}
+  set price(price: number | null) {}
+  set isInBasket(state: boolean) {}
 }
 ```
 
-Конструктор типизирован `interface ICardPreviewViewConstructor`. Принимает аргументами контейнер элементов информации о товаре и объект для передачи колбэка слушателю события. В реализации использует родительский конструктор. Также в конструкторе производится поиск дополнительных элементов карточки товара для отображения в модальном окне и сохранение их в защищенные поля класса.
+Конструктор типизирован `interface ICardPreviewViewConstructor`. Принимает аргументами контейнер элементов информации о товаре и объект для передачи колбэка слушателю события. В реализации использует родительский конструктор. Также в конструкторе производится поиск дополнительных элементов карточки товара для отображения в модальном окне и сохранение их в защищенные поля класса. Назначает обработчик события кнопке для добавления товара в корзину.
 
 Поля класса:
 
@@ -460,7 +445,7 @@ class CardPreviewView extends CardView<ICardPreviewData> implements ICardPreview
 - `set price` - переназначенный сеттер для установки цены товара в качестве текстового контента в элемент `_price`. В случае если цена товара равна `null`, устанавливается значение `Бесценно` и блокируется кнопка покупки товара.
 - `set isInBasket` - сеттер для установки текстового контента кнопки `_button` в зависимости от нахождения товара в корзине.
 
-#### Класс CardBasketView
+### Класс CardBasketView
 
 Расширяет класс CardView и предоставляет методы для отображения элементов информации о товаре в корзине. Данные типизированы `interface ICardBasketData`. Класс реализует интерфейс `ICardBasketView`. Включает метод для обновления индекса товара в корзине.
 
@@ -469,12 +454,12 @@ class CardBasketView extends CardView<ICardBasketData> implements ICardBasketVie
   protected _index: HTMLElement;
   protected _button: HTMLButtonElement;
 
-  constructor(container: HTMLElement, actions?: ICardActions): ICardBasketView {};
-  set index(index: number) {};
+  constructor(container: HTMLElement, actions?: ICardActions): ICardBasketView {}
+  set index(index: number) {}
 }
 ```
 
-Конструктор типизирован `interface ICardBasketViewConstructor`. Принимает аргументами контейнер для размещения элементов информации о товаре и объект для передачи колбэка слушателю события. В реализации использует родительский конструктор. Также в конструкторе производится поиск дополнительных элементов карточки товара для отображения в корзине и сохранение их в защищенные поля класса.
+Конструктор типизирован `interface ICardBasketViewConstructor`. Принимает аргументами контейнер для размещения элементов информации о товаре и объект для передачи колбэка слушателю события. В реализации использует родительский конструктор. Также в конструкторе производится поиск дополнительных элементов карточки товара для отображения в корзине и сохранение их в защищенные поля класса. Назначает обработчик события кнопке для удаления товара из корзины.
 
 Поля класса:
 
@@ -485,7 +470,7 @@ class CardBasketView extends CardView<ICardBasketData> implements ICardBasketVie
 
 - `set index` - сеттер для установки индекса товара в качестве текстового контента в элемент `_index`.
 
-#### Класс BasketView
+### Класс BasketView
 
 Расширяет базовый класс View и предоставляет методы для отображения элементов корзины. Данные типизированы `interface IBasketData`. Класс реализует интерфейс `IBasketView`. Включает методы для обновления карточек товаров в корзине и общей стоимости заказа.
 
@@ -495,17 +480,17 @@ class BasketView extends View<IBasketData> implements IBasketView {
   protected _total: HTMLElement;
   protected _button: HTMLButtonElement;
 
-  constructor(container: HTMLElement, protected events: IEvents): IBasketView {};
-  set items(items: HTMLElement[]) {};
-  set total(total: number) {};
+  constructor(container: HTMLElement, protected events: IEvents): IBasketView {}
+  set items(items: HTMLElement[]) {}
+  set total(total: number) {}
 }
 ```
 
-Конструктор типизирован `interface IBasketViewConstructor`. Принимает аргументами контейнер элементов корзины и объект событий типа `IEvents` для взаимодействия c другими компонентами. В реализации использует родительский конструктор. Сохраняет объект событий в защищенное поле `events`. Также в конструкторе производится поиск изменяющихся элементов и сохранение их в защищенные поля класса.
+Конструктор типизирован `interface IBasketViewConstructor`. Принимает аргументами контейнер элементов корзины и объект событий типа `IEvents` для взаимодействия c другими компонентами. В реализации использует родительский конструктор. Сохраняет объект событий в защищенное поле `events`. Также в конструкторе производится поиск изменяющихся элементов и сохранение их в защищенные поля класса. Назначает обработчик события кнопке для перехода к оформлению заказа.
 
 Поля класса:
 
-- `_list` - защищенное поле элемента контейнера для карточек товара в корзине.
+- `_list` - защищенное поле элемента контейнера для карточек товаров в корзине.
 - `_total` - защищенное поле элемента общей стоимости товаров в корзине.
 - `_button` - защищенное поле элемента `<button>` кнопки оформления заказа.
 
@@ -514,28 +499,29 @@ class BasketView extends View<IBasketData> implements IBasketView {
 - `set items` - сеттер для обновления товаров в корзине в соответствии с переданным массивом элементов `items`.
 - `set total` - сеттер для обновления общей стоимости товаров корзины в соответствии с переданным значением `total`.
 
-#### Классы отображения форм
+### Классы отображения форм
 
 ![Схема классов FormView](./documentation/View/FormClasses.svg)
 
-#### Класс FormView
+### Класс FormView
 
-Расширяет базовый класс View и предоставляет методы для работы с элементами формы оформления заказа, в том числе с ошибками заполнения и кнопкой отправки формы. Данные типизированы `interface IFormData`. Класс реализует интерфейс `IFormView<T>`. Включает методы для обновления ошибок формы, блокировки кнопки отправки, инициирования события заполнения полей формы.
+Расширяет базовый класс View и предоставляет методы для работы с элементами формы оформления заказа, в том числе с ошибками заполнения и кнопкой отправки формы. Данные типизированы `interface IFormData`. Класс реализует интерфейс `IFormView<T>`. Включает методы для обновления ошибок формы, блокировки кнопки отправки, инициирования события заполнения полей формы и очистки формы.
 
 ```
 class FormView<T> extends View<IFormData> implements IFormView<T> {
   protected _submitButton: HTMLButtonElement;
   protected _errors: HTMLElement;
 
-  constructor(protected container: HTMLFormElement, protected events: IEvents): IFormView<T> {};
-  protected onInputChange(field: keyof T, value: string): void {};
-  set isValid(state: boolean) {};
-  set errors(errors: string) {};
-  render(state: Partial<T> & IFormData): HTMLFormElement {};
+  constructor(protected container: HTMLFormElement, protected events: IEvents): IFormView<T> {}
+  protected onInputChange(field: keyof T, value: string): void {}
+  set isValid(state: boolean) {}
+  set errors(errors: string) {}
+  clearForm(): void {}
+  render(state: Partial<T> & IFormData): HTMLFormElement {}
 }
 ```
 
-Конструктор типизирован `interface IFormViewConstructor<T>`. Принимает аргументами контейнер - элемент формы `<form>` и объект событий типа `IEvents` для взаимодействия c другими компонентами. В реализации использует родительский конструктор. Сохраняет объект событий в защищенное поле `events`. Также в конструкторе класса производится поиск элементов формы и сохранение их в защищенные поля класса.
+Конструктор типизирован `interface IFormViewConstructor<T>`. Принимает аргументами контейнер - элемент формы `<form>` и объект событий типа `IEvents` для взаимодействия c другими компонентами. В реализации использует родительский конструктор. Сохраняет объект событий в защищенное поле `events`. Также в конструкторе класса производится поиск элементов формы и сохранение их в защищенные поля класса. Назначает обработчики события форме при изменении ее полей ввода и отправке.
 
 Поля класса:
 
@@ -547,9 +533,10 @@ class FormView<T> extends View<IFormData> implements IFormView<T> {
 - `onInputChange` - защищенный метод инициирования события заполнения полей формы.
 - `set isValid` - сеттер для переключения блокировки кнопки отправки в соответствии с переданным состоянием `state`.
 - `set errors` - сеттер для установки ошибок формы в качестве текстового контента в элемент `_errors`.
+- `clearForm` - метод очистки формы.
 - `render` - переопределенный метод для отрисовки формы в соответствии с переданным состоянием `state`, типизированным с учетом данных формы `IFormData`. Использует родительский метод. Возвращает элемент формы `<form>` с обновленными свойствами.
 
-#### Класс PaymentAddressView
+### Класс PaymentAddressView
 
 Расширяет класс FormView и предоставляет методы для работы с элементами формы оплаты и адреса. Данные типизированы `type IPaymentAddressData`. Класс реализует интерфейс `IPaymentAddressView`. Включает методы для обновления адреса доставки, переключения способа оплаты товара.
 
@@ -557,13 +544,14 @@ class FormView<T> extends View<IFormData> implements IFormView<T> {
 class PaymentAddressView extends FormView<IPaymentAddressData> implements IPaymentAddressView {
   protected _paymentButtons: HTMLButtonElement[];
 
-  constructor(container: HTMLFormElement, events: IEvents): IPaymentAddressView {};
-  set payment(payment: string) {};
-  set address(address: string) {};
+  constructor(container: HTMLFormElement, events: IEvents): IPaymentAddressView {}
+  set payment(payment: string) {}
+  set address(address: string) {}
+  clearForm(): void {}
 }
 ```
 
-Конструктор типизирован `interface IPaymentAddressViewConstructor`. Принимает аргументами контейнер - элемент формы и объект событий. В реализации использует родительский конструктор. Также в конструкторе класса производится поиск кнопок способов оплаты заказа и сохранение их в защищенное поле класса.
+Конструктор типизирован `interface IPaymentAddressViewConstructor`. Принимает аргументами контейнер - элемент формы и объект событий. В реализации использует родительский конструктор. Также в конструкторе класса производится поиск кнопок способов оплаты заказа и сохранение их в защищенное поле класса. Назначает обработчики события кнопкам для переключения способа оплаты.
 
 Поля класса:
 
@@ -573,16 +561,17 @@ class PaymentAddressView extends FormView<IPaymentAddressData> implements IPayme
 
 - `set payment` - сеттер для переключения кнопок способов оплаты `_paymentButtons` в соответствии с переданным значением `payment`.
 - `set address` - сеттер для установки передаваемого адреса доставки заказа `address` в качестве значения соответствующего поля ввода.
+- `clearForm` - переопределенный метод очистки формы. Сбрасывает активное состояние кнопок способов оплаты.
 
-#### Класс ContactsView
+### Класс ContactsView
 
 Расширяет класс FormView и предоставляет методы для работы с элементами формы контактов. Данные типизированы `type IContactsData`. Класс реализует интерфейс `IContactsView`. Включает методы для обновления email и телефона.
 
 ```
 class ContactsView extends FormView<IContactsData> implements IContactsView {
-  constructor(container: HTMLFormElement, events: IEvents): IContactsView {};
-  set email(email: string) {};
-  set phone(phone: string) {};
+  constructor(container: HTMLFormElement, events: IEvents): IContactsView {}
+  set email(email: string) {}
+  set phone(phone: string) {}
 }
 ```
 
@@ -593,7 +582,7 @@ class ContactsView extends FormView<IContactsData> implements IContactsView {
 - `set email` - сеттер для установки передаваемого email `email` в качестве значения соответствующего поля ввода.
 - `set phone` - сеттер для установки передаваемого номера телефона `phone` в качестве значения соответствующего поля ввода.
 
-#### Класс SuccessView
+### Класс SuccessView
 
 Расширяет базовый класс View и предоставляет методы для отображения элементов сообщения об успешном оформлении заказа. Данные типизированы `interface ISuccessData`. Класс реализует интерфейс `ISuccessView`. Включает метод для обновления суммы заказа.
 
@@ -602,12 +591,12 @@ class SuccessView extends View<ISuccessData> implements ISuccessView {
   protected _closeButton: HTMLButtonElement;
   protected _total: HTMLElement;
 
-  constructor(container: HTMLElement, actions: ISuccessActions): ISuccessView {};
-  set total(total: number) {};
+  constructor(container: HTMLElement, actions: ISuccessActions): ISuccessView {}
+  set total(total: number) {}
 }
 ```
 
-Конструктор типизирован `interface ISuccessViewConstructor`. Принимает аргументами контейнер элементов сообщения и объект типа `ISuccessActions` для передачи колбэка слушателю события. В реализации использует родительский конструктор. Также в конструкторе класса производится поиск изменяющихся элементов сообщения и сохранение их в защищенные поля класса.
+Конструктор типизирован `interface ISuccessViewConstructor`. Принимает аргументами контейнер элементов сообщения и объект типа `ISuccessActions` для передачи колбэка слушателю события. В реализации использует родительский конструктор. Также в конструкторе класса производится поиск изменяющихся элементов сообщения и сохранение их в защищенные поля класса. Назначает обработчик события кнопке для закрытия модального окна.
 
 Поля класса:
 
@@ -618,7 +607,7 @@ class SuccessView extends View<ISuccessData> implements ISuccessView {
 
 - `set total`- сеттер для установки суммы заказа в качестве текстового контента в элемент `_total`.
 
-#### Класс ModalView
+### Класс ModalView
 
 Расширяет базовый класс View и предоставляет методы для отображения элементов модального окна. Данные типизированы `interface IModalData`. Класс реализует интерфейс `IModalView`. Включает методы для обновления внутреннего контента, открытия и закрытия модального окна.
 
@@ -627,15 +616,15 @@ class ModalView extends View<IModalData> implements IModalView {
   protected _closeButton: HTMLButtonElement;
   protected _content: HTMLElement;
 
-  constructor(container: HTMLElement, protected events: IEvents): IModalView {};
-  set content(content: HTMLElement) {};
-  open(): void {};
-  close(): void {};
-  render(data: IModalData): HTMLElement {};
+  constructor(container: HTMLElement, protected events: IEvents): IModalView {}
+  set content(content: HTMLElement) {}
+  open(): void {}
+  close(): void {}
+  render(data: IModalData): HTMLElement {}
 }
 ```
 
-Конструктор типизирован `interface IModalViewConstructor`. Принимает аргументами контейнер элементов модального окна и объект событий типа `IEvents` для взаимодействия c другими компонентами. В реализации использует родительский конструктор. Сохраняет объект событий в защищенное поле `events`. Также в конструкторе класса производится поиск элементов модального окна и сохранение их в защищенные поля класса.
+Конструктор типизирован `interface IModalViewConstructor`. Принимает аргументами контейнер элементов модального окна и объект событий типа `IEvents` для взаимодействия c другими компонентами. В реализации использует родительский конструктор. Сохраняет объект событий в защищенное поле `events`. Также в конструкторе класса производится поиск элементов модального окна и сохранение их в защищенные поля класса. Назначает обработчики события кнопке для закрытия модального окна и контейнеру для закрытия модального окна кликом на оверлей.
 
 Поля класса:
 

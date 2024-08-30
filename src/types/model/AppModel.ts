@@ -15,13 +15,8 @@ export type ICategory =
 	| 'дополнительное'
 	| 'другое';
 
-export type IBasketProduct = Pick<
-	IProduct,
-	'id' | 'title' | 'price' | 'isInBasket'
->;
-
 export interface IPaymentAddressForm {
-	payment: 'card' | 'cash';
+	payment: 'card' | 'cash' | '';
 	address: string;
 }
 
@@ -47,24 +42,30 @@ export type IFormErrors = Partial<Record<keyof IOrder, string>>;
 export interface IAppData {
 	productList: IProduct[];
 	preview: string | null;
-	basket: IBasketProduct[];
+	basket: IProduct[];
 	order: IOrder;
 }
 
 export interface IAppModel {
 	productList: IProduct[];
 	preview: string | null;
-	basket: IBasketProduct[];
-	order: IOrder;
+	basket: IProduct[];
+	order: Partial<IOrder>;
 	formErrors: IFormErrors;
 
 	setProductList(items: IProduct[]): void;
 	setPreviewProduct(item: IProduct): void;
-	addProductToBasket(item: IBasketProduct): void;
-	removeProductFromBasket(id: string): void;
+	addProductToBasket(item: IProduct): void;
+	removeProductFromBasket(item: IProduct): void;
 	getTotalPrice(): number;
-	setOrderField(field: keyof IOrderForm, value: string): void;
+
+	setOrderField<T extends keyof IOrderForm>(
+		field: T,
+		value: IOrderForm[T]
+	): void;
+
 	validateOrder(): boolean;
+	setOrder(): void;
 	clearBasket(): void;
-	getProduct(id: string): IProduct;
+	clearOrder(): void;
 }

@@ -12,5 +12,6 @@ export interface IFormViewConstructor<T> {
 export interface IFormView<T> {
 	set isValid(state: boolean);
 	set errors(errors: string);
+	clearForm(): void;
 	render(state: Partial<T> & IFormData): HTMLFormElement;
 }
