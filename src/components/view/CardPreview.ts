@@ -4,10 +4,10 @@ import {
 	ICardPreviewData,
 	ICardPreviewView,
 } from '../../types/view/CardPreview';
-import { CardView } from './Card';
+import { CardCatalogView } from './CardCatalog';
 
 export class CardPreviewView
-	extends CardView<ICardPreviewData>
+	extends CardCatalogView<ICardPreviewData>
 	implements ICardPreviewView
 {
 	protected _description: HTMLElement;

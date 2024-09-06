@@ -11,7 +11,7 @@ import { EventEmitter } from './components/base/events';
 import { AppApi } from './components/model/AppAPI';
 import { AppModel } from './components/model/AppModel';
 import { PageView } from './components/view/Page';
-import { CardView } from './components/view/Card';
+import { CardCatalogView } from './components/view/CardCatalog';
 import { CardPreviewView } from './components/view/CardPreview';
 import { CardBasketView } from './components/view/CardBasket';
 import { BasketView } from './components/view/Basket';
@@ -52,7 +52,7 @@ events.onAll(({ eventName, data }) => console.log(eventName, data));
 
 events.on('products:change', () => {
 	page.productsList = app.productList.map((item) => {
-		const card = new CardView(cloneTemplate(cardTemplate), {
+		const card = new CardCatalogView(cloneTemplate(cardTemplate), {
 			onClick: () => {
 				events.emit('card:select', item);
 			},
@@ -67,7 +67,7 @@ events.on('products:change', () => {
 		});
 	});
 
-	page.basketCounter = app.basket.length;
+	page.basketCounter = app.getBasketItems().length;
 });
 
 events.on('card:select', (item: IProduct) => {
@@ -111,9 +111,9 @@ events.on('basket:open', () => {
 });
 
 events.on('backet:change', () => {
-	page.basketCounter = app.basket.length;
+	page.basketCounter = app.getBasketItems().length;
 
-	basket.items = app.basket.map((item, index) => {
+	basket.items = app.getBasketItems().map((item, index) => {
 		const card = new CardBasketView(cloneTemplate(cardBasketTemplate), {
 			onClick: () => {
 				events.emit('card:remove', item);
@@ -176,10 +176,14 @@ events.on('order:submit', () => {
 });
 
 events.on('contacts:submit', () => {
-	app.setOrder();
+	const order: IOrder = {
+		...(app.order as IOrderForm),
+		items: app.getBasketItems().map((item) => item.id),
+		total: app.getTotalPrice(),
+	};
 
 	api
-		.postOrder(app.order as IOrder)
+		.postOrder(order)
 		.then((result) => {
 			modal.render({ content: success.render({ total: result.total }) });
 			app.clearBasket();

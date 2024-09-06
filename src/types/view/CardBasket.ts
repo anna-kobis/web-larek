@@ -1,6 +1,7 @@
 import { ICardActions } from './Card';
 
 export interface ICardBasketData {
+	id: string;
 	title: string;
 	price: number;
 	index: number;

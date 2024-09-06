@@ -1,7 +1,6 @@
 import {
 	IProduct,
 	IOrderForm,
-	IOrder,
 	IFormErrors,
 	IAppData,
 	IAppModel,
@@ -11,8 +10,7 @@ import { Model } from '../base/model';
 export class AppModel extends Model<IAppData> implements IAppModel {
 	productList: IProduct[];
 	preview: string | null;
-	basket: IProduct[] = [];
-	order: Partial<IOrder> = {};
+	order: Partial<IOrderForm> = {};
 	formErrors: IFormErrors;
 
 	setProductList(items: IProduct[]): void {
@@ -27,18 +25,20 @@ export class AppModel extends Model<IAppData> implements IAppModel {
 
 	addProductToBasket(item: IProduct): void {
 		item.isInBasket = true;
-		this.basket = [...this.basket, item];
-		this.emitChanges('backet:change', this.basket);
+		this.emitChanges('backet:change', this.getBasketItems());
 	}
 
 	removeProductFromBasket(item: IProduct): void {
 		item.isInBasket = false;
-		this.basket = this.basket.filter((product) => product.id !== item.id);
 		this.emitChanges('backet:change');
 	}
 
+	getBasketItems(): IProduct[] {
+		return this.productList.filter((item) => item.isInBasket);
+	}
+
 	getTotalPrice(): number {
-		return this.basket.reduce((sum, item) => sum + item.price, 0);
+		return this.getBasketItems().reduce((sum, item) => sum + item.price, 0);
 	}
 
 	setOrderField<T extends keyof IOrderForm>(
@@ -73,14 +73,8 @@ export class AppModel extends Model<IAppData> implements IAppModel {
 		return Object.keys(errors).length === 0;
 	}
 
-	setOrder(): void {
-		this.order.items = this.basket.map((item) => item.id);
-		this.order.total = this.getTotalPrice();
-	}
-
 	clearBasket(): void {
-		this.basket.forEach((item) => (item.isInBasket = false));
-		this.basket = [];
+		this.productList.forEach((item) => (item.isInBasket = false));
 		this.emitChanges('backet:change');
 	}
 

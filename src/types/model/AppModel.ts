@@ -37,26 +37,25 @@ export interface IOrderResult {
 	total: number;
 }
 
-export type IFormErrors = Partial<Record<keyof IOrder, string>>;
+export type IFormErrors = Partial<Record<keyof IOrderForm, string>>;
 
 export interface IAppData {
 	productList: IProduct[];
 	preview: string | null;
-	basket: IProduct[];
-	order: IOrder;
+	order: IOrderForm;
 }
 
 export interface IAppModel {
 	productList: IProduct[];
 	preview: string | null;
-	basket: IProduct[];
-	order: Partial<IOrder>;
+	order: Partial<IOrderForm>;
 	formErrors: IFormErrors;
 
 	setProductList(items: IProduct[]): void;
 	setPreviewProduct(item: IProduct): void;
 	addProductToBasket(item: IProduct): void;
 	removeProductFromBasket(item: IProduct): void;
+	getBasketItems(): IProduct[];
 	getTotalPrice(): number;
 
 	setOrderField<T extends keyof IOrderForm>(
@@ -65,7 +64,6 @@ export interface IAppModel {
 	): void;
 
 	validateOrder(): boolean;
-	setOrder(): void;
 	clearBasket(): void;
 	clearOrder(): void;
 }
