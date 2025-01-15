@@ -2,30 +2,11 @@
 
 Проектная работа представляет собой одностраничный сайт - интернет-магазин с товарами для веб-разработчиков - Web-ларёк. На сайте можно просмотреть каталог товаров, добавить товары в корзину и оформить заказ.
 
+Проект создан для практики построения MVP-архитектуры веб-приложения на классах JavaScript с использованием TypeScript.
+
 ## Стек технологий
 
-- Используемый стек: HTML, SCSS, TypeScript.
-- Для сборки используется Webpack.
-- Подключены инструменты форматирования и линтинга: Prettier, ESLint.
-
-## Структура проекта
-
-Структура проекта:
-
-- src/ — исходные файлы проекта
-- src/components/ — папка с JS компонентами
-- src/components/base/ — папка с базовым кодом
-- src/components/model/ - папка с моделями данных
-- src/components/view/ - папка с компонентами отображения
-- src/types/ — папка с типами
-
-Важные файлы:
-
-- src/pages/index.html — HTML-файл главной страницы
-- src/scss/styles.scss — корневой файл стилей
-- src/index.ts — точка входа приложения
-- src/utils/constants.ts — файл с константами
-- src/utils/utils.ts — файл с утилитами
+<img alt="Иконка HTML5" src="https://img.shields.io/badge/HTML5-%23E34F26?style=for-the-badge&logo=html5&logoColor=white"> <img alt="Иконка SASS" src="https://img.shields.io/badge/SCSS-%23CC6699?style=for-the-badge&logo=sass&logoColor=white"> <img alt="Иконка JavaScript" src="https://img.shields.io/badge/JavaScript-black?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E"> <img alt="Иконка TypeScript" src="https://img.shields.io/badge/TypeScript-%233178C6?style=for-the-badge&logo=typescript&logoColor=white"> <img alt="Иконка Webpack" src="https://img.shields.io/badge/Webpack-%238DD6F9?style=for-the-badge&logo=webpack&logoColor=white">
 
 ## Установка и запуск
 
@@ -56,6 +37,25 @@ npm run build
 ```
 yarn build
 ```
+
+## Структура проекта
+
+Структура проекта:
+
+- src/ — исходные файлы проекта
+- src/components/ — папка с JS компонентами
+- src/components/base/ — папка с базовым кодом
+- src/components/model/ - папка с моделями данных
+- src/components/view/ - папка с компонентами отображения
+- src/types/ — папка с типами
+
+Важные файлы:
+
+- src/pages/index.html — HTML-файл главной страницы
+- src/scss/styles.scss — корневой файл стилей
+- src/index.ts — точка входа приложения
+- src/utils/constants.ts — файл с константами
+- src/utils/utils.ts — файл с утилитами
 
 ## Архитектура
 
