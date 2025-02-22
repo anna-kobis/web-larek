@@ -1,7 +1,21 @@
 {
   "name": "web-larek",
   "version": "1.0.0",
+  "description": "Интернет-магазин «Web-Larek»",
   "main": "index.js",
+  "scripts": {
+    "build": "webpack --mode=production --node-env=production",
+    "build:dev": "webpack --mode=development",
+    "build:prod": "webpack --mode=production --node-env=production",
+    "watch": "webpack --watch",
+    "dev": "webpack serve",
+    "lint:check": "eslint --ext .js,.ts ./src",
+    "lint:fix": "npm run lint -- --fix",
+    "format": "prettier ./src --write",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
+  },
+  "author": "Anna Kobis",
   "license": "MIT",
   "devDependencies": {
     "@babel/core": "^7.21.5",
@@ -11,6 +25,7 @@
     "@webpack-cli/generators": "^3.0.2",
     "autoprefixer": "^10.4.14",
     "babel-loader": "^9.1.2",
+    "copy-webpack-plugin": "^12.0.2",
     "css-loader": "^6.7.3",
     "dotenv": "^16.3.1",
     "eslint": "^8.39.0",
@@ -27,21 +42,9 @@
     "style-loader": "^3.3.2",
     "terser-webpack-plugin": "^5.3.10",
     "ts-loader": "^9.4.2",
-    "typescript": "^5.0.4",
+    "typescript": "~5.1.0",
     "webpack": "^5.81.0",
     "webpack-cli": "^5.0.2",
     "webpack-dev-server": "^4.13.3"
-  },
-  "description": "learning project",
-  "scripts": {
-    "build": "webpack --mode=production --node-env=production",
-    "build:dev": "webpack --mode=development",
-    "build:prod": "webpack --mode=production --node-env=production",
-    "watch": "webpack --watch",
-    "start": "webpack serve",
-    "lint": "eslint --ext .js,.ts ./src",
-    "lint:fix": "npm run lint -- --fix",
-    "format": "prettier ./src --write",
-    "deploy": "gh-pages -d dist"
   }
 }
